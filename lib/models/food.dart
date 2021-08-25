@@ -1,5 +1,7 @@
 part of 'models.dart';
 
+enum FoodType { new_food, popular, recommended }
+
 class Food extends Equatable {
   final int id;
   final String picturePath;
@@ -8,6 +10,7 @@ class Food extends Equatable {
   final String ingredients;
   final int price;
   final double rate;
+  final List<FoodType> types;
 
   Food(
       {this.id,
@@ -16,7 +19,8 @@ class Food extends Equatable {
       this.description,
       this.ingredients,
       this.price,
-      this.rate});
+      this.rate, 
+      this.types = const []});
 
   @override
   List<Object> get props =>
@@ -33,7 +37,8 @@ List<Food> mockFoods = [
           "Sate Sayur Sultan adalah menu sate vegan paling terkenal di Bandung. Sate ini dibuat dari berbagai macam bahan bermutu tinggi. Semua bahan ditanam dengan menggunakan teknologi masa kini sehingga memiliki nutrisi yang kaya.",
       ingredients: "Bawang Merah, Paprika, Bawang Bombay, Timun",
       price: 150000,
-      rate: 4.2),
+      rate: 4.2,
+      types: [FoodType.new_food, FoodType.popular, FoodType.recommended]),
   Food(
       id: 2,
       picturePath:
@@ -53,7 +58,8 @@ List<Food> mockFoods = [
           "Salad ala mexico yang kaya akan serat dan vitamin. Seluruh bahan diambil dari Mexico sehingga akan memiliki cita rasa yang original.",
       ingredients: "Jagung, Selada, Tomat Ceri, Keju, Wortel",
       price: 105900,
-      rate: 3.9),
+      rate: 3.9,
+      types: [FoodType.new_food]),
   Food(
       id: 4,
       picturePath:
@@ -63,7 +69,8 @@ List<Food> mockFoods = [
           "Sup wortel pedas yang unik ini cocok banget buat kalian-kalian yang suka pedas namun ingin tetap sehat. Rasanya yang unik akan memanjakan lidah Anda.",
       ingredients: "Wortel, Seledri, Kacang Tanah, Labu, Garam, Gula",
       price: 60000,
-      rate: 4.9),
+      rate: 4.9,
+      types: [FoodType.recommended]),
   Food(
       id: 5,
       picturePath:
