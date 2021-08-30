@@ -66,7 +66,7 @@ class IllustrationPage extends StatelessWidget {
                   width: 200,
                   height: 45,
                   child: ElevatedButton(
-                    onPressed: buttonTap1,
+                    onPressed: buttonTap2,
                     style: ElevatedButton.styleFrom(
                       primary: '8D92A3'.toColor(),
                       elevation: 0,
