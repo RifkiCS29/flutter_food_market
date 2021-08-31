@@ -2,10 +2,28 @@ part of 'services.dart';
 
 class UserServices {
   static Future<ApiReturnValue<User>> signIn(
-      String email, String password) async {
-    await Future.delayed(Duration(microseconds: 500));
+      String email, String password, {http.Client client}) async {
+    if(client == null) {
+      client = http.Client();
+    }
 
-    return ApiReturnValue(value: mockUser);
+    String url = baseURL + 'login';
+
+    var response = await client.post(url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(<String, String>{'email': email, 'password': password})
+    );
+
+    if(response.statusCode != 200) {
+      return ApiReturnValue(message: 'Please Try Again');
+    }
+
+    var data = jsonDecode(response.body);
+
+    User.token = data['data']['access_token'];
+    User value = User.fromJson(data['data']['user']);
+
+    return ApiReturnValue(value: value);
   }
 
   static Future<ApiReturnValue<User>> signUp(User user, String password,
@@ -36,7 +54,7 @@ class UserServices {
     var data = jsonDecode(response.body);
 
     User.token = data['data']['access_token'];
-    User value = data['data']['user'];
+    User value = User.fromJson(data['data']['user']);
 
     if (pictureFile != null) {
       ApiReturnValue<String> result = await uploadProfilePicture(pictureFile);
