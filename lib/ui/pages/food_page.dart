@@ -67,7 +67,7 @@ class _FoodPageState extends State<FoodPage> {
                       children: state.foods
                           .map((e) => Padding(
                                 padding: EdgeInsets.only(
-                                    left: (e == mockFoods.first)
+                                    left: (e == state.foods.first)
                                         ? defaultMargin
                                         : 0,
                                     right: defaultMargin),
@@ -125,8 +125,21 @@ class _FoodPageState extends State<FoodPage> {
                             .map((e) => Padding(
                                   padding: EdgeInsets.fromLTRB(
                                       defaultMargin, 0, defaultMargin, 16),
-                                  child: FoodListItem(
-                                      food: e, itemWidth: listItemWidth),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.to(FoodDetailsPage(
+                                        transaction: Transaction(
+                                          food: e,
+                                          user: (context.bloc<UserCubit>().state as UserLoaded).user
+                                        ),  
+                                        onBackButtonPressed: () {
+                                          Get.back();
+                                        },
+                                      ));
+                                    },
+                                    child: FoodListItem(
+                                        food: e, itemWidth: listItemWidth),
+                                  ),
                                 ))
                             .toList(),
                       );
