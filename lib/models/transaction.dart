@@ -50,7 +50,7 @@ class Transaction extends Equatable {
       ? TransactionStatus.pending
       : (data['status'] == 'DELIVERED')
         ? TransactionStatus.delivered
-        : (data['status' == 'CANCELLED'])
+        : (data['status'] == 'CANCELLED')
           ? TransactionStatus.cancelled
           : TransactionStatus.on_delivery,
     paymentUrl: data['payment_url']

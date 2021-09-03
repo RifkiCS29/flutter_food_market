@@ -11,7 +11,7 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   bool isLoading = false;
-  
+
   @override
   Widget build(BuildContext context) {
     return GeneralPage(
@@ -205,9 +205,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                   locale: 'id-ID',
                                   symbol: 'IDR ',
                                   decimalDigits: 0)
-                              .format(widget.transaction.total *
-                                      1.1 +
-                                  50000),
+                              .format(widget.transaction.total * 1.1 + 50000),
                           style: blackFontStyle3.copyWith(
                               fontWeight: FontWeight.w500,
                               color: '1ABC9C'.toColor()),
@@ -337,32 +335,36 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
           ),
           //// Checkout Button
-          (isLoading) 
-            ? Center(
-                child: loadingIndicator,
-              ) 
-            : Container(
-                margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-                height: 45,
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async{
-                    setState(() {
-                      isLoading = true;
-                    });
+          (isLoading)
+              ? Center(
+                  child: loadingIndicator,
+                )
+              : Container(
+                  margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+                  height: 45,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
 
-                    bool result = await context.bloc<TransactionCubit>().submitTransaction(widget.transaction.copyWith(
-                      dateTime: DateTime.now(),
-                      total: (widget.transaction.total * 1.1).toInt() + 50000
-                    ));
+                      String paymentURL = await context
+                          .bloc<TransactionCubit>()
+                          .submitTransaction(widget.transaction.copyWith(
+                              dateTime: DateTime.now(),
+                              total: (widget.transaction.total * 1.1).toInt() +
+                                  50000));
 
-                    if(result == true) {
-                      Get.to(SuccessOrderPage());
-                    } else {
-                      Get.snackbar("", "",
-                        backgroundColor: "D9435E".toColor(),
-                        icon: Icon(
-                          MdiIcons.closeCircleOutline,
+                      if (paymentURL != null) {
+                        Get.to(PaymentMethodPage(paymentURL));
+                      } else {
+                        Get.snackbar(
+                          "",
+                          "",
+                          backgroundColor: "D9435E".toColor(),
+                          icon: Icon(
+                            MdiIcons.closeCircleOutline,
                             color: Colors.white,
                           ),
                           titleText: Text(
@@ -370,28 +372,27 @@ class _PaymentPageState extends State<PaymentPage> {
                             style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600),
-                            ),
-                            messageText: Text(
-                              "Please Try Again Later.", 
-                              style: GoogleFonts.poppins(color: Colors.white)
-                            ),
-                         );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: mainColor,
-                    elevation: 0,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          messageText: Text("Please Try Again Later.",
+                              style: GoogleFonts.poppins(color: Colors.white)),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: mainColor,
+                      elevation: 0,
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
+                    child: Text(
+                      "Checkout Now",
+                      style:
+                          blackFontStyle3.copyWith(fontWeight: FontWeight.w500),
                     ),
                   ),
-                  child: Text(
-                    "Checkout Now",
-                    style: blackFontStyle3.copyWith(fontWeight: FontWeight.w500),
-                  ),
-                ),
-              )
+                )
         ],
       ),
     );
