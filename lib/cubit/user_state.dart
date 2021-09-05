@@ -25,4 +25,22 @@ class UserLoadingFailed extends UserState {
 
   @override
   List<Object> get props => [message];
-}  
+}
+
+class UserSignOut extends UserState {
+  final String message;
+
+  UserSignOut(this.message);
+
+  @override
+  List<Object> get props => [message];  
+}
+
+class UserSignOutFailed extends UserState {
+  final String message;
+
+  UserSignOutFailed(this.message);
+
+  @override
+  List<Object> get props => [message];  
+}

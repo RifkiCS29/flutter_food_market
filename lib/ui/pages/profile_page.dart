@@ -7,6 +7,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int selectedIndex = 0;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -116,8 +117,82 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             SizedBox(
-              height: 80,
-            )
+              height: 10,
+            ),
+            Container(
+            width: double.infinity,
+            margin: EdgeInsets.only(top: 24),
+            height: 45,
+            padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+            child: isLoading
+                ? loadingIndicator
+                : ElevatedButton(
+                    onPressed: () async {
+                       setState(() {
+                         isLoading = true;
+                       });
+
+                       await context.bloc<UserCubit>().signOut();
+
+                       UserState state = context.bloc<UserCubit>().state;
+
+                       if(state is UserSignOut) {
+                          Get.to(SignInPage());
+                          Get.snackbar("", "",
+                            backgroundColor: "32A852".toColor(),
+                            icon: Icon(
+                              MdiIcons.closeCircleOutline,
+                              color: Colors.white,
+                            ),
+                            titleText: Text(
+                              "Sign Out Success",
+                              style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            messageText: Text(
+                              state.message, 
+                              style: GoogleFonts.poppins(color: Colors.white)
+                            ),
+                         );
+                       } else if(state is UserSignOutFailed) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                         Get.snackbar("", "",
+                            backgroundColor: "D9435E".toColor(),
+                            icon: Icon(
+                              MdiIcons.closeCircleOutline,
+                              color: Colors.white,
+                            ),
+                            titleText: Text(
+                              "SignOut Failed",
+                              style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            messageText: Text(
+                              (state.message), 
+                              style: GoogleFonts.poppins(color: Colors.white)
+                            ),
+                         );
+                       }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: mainColor,
+                      elevation: 0,
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
+                    child: Text(
+                      'Sign Out',
+                      style: GoogleFonts.poppins(
+                          color: Colors.black, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+          ),
           ],
         ),
       ],
