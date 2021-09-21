@@ -84,7 +84,7 @@ class _SignInPageState extends State<SignInPage> {
                        if(state is UserLoaded) {
                           context.bloc<FoodCubit>().getFoods();
                           context.bloc<TransactionCubit>().getTransactions();
-                          Get.to(MainPage());
+                          Get.off(MainPage());
                        } else {
                          Get.snackbar("", "",
                             backgroundColor: "D9435E".toColor(),

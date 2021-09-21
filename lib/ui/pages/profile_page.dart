@@ -137,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
                        UserState state = context.bloc<UserCubit>().state;
 
                        if(state is UserSignOut) {
-                          Get.to(SignInPage());
+                          Get.off(SignInPage());
                           Get.snackbar("", "",
                             backgroundColor: "32A852".toColor(),
                             icon: Icon(
